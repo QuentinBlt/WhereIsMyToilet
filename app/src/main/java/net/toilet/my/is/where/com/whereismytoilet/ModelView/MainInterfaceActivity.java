@@ -12,11 +12,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import net.toilet.my.is.where.com.whereismytoilet.Adapters.ToiletListAdapter;
 import net.toilet.my.is.where.com.whereismytoilet.R;
 import net.toilet.my.is.where.com.whereismytoilet.View.Toilette;
 import net.toilet.my.is.where.com.whereismytoilet.View.ToiletteList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -26,7 +28,7 @@ public class MainInterfaceActivity extends Activity implements ToiletteList.Toil
     private SwipeRefreshLayout RefreshLayout;
     private ListView ToiletListView;
     private ToiletteList toilets;
-    ArrayAdapter mAdapter;
+    ToiletListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,17 @@ public class MainInterfaceActivity extends Activity implements ToiletteList.Toil
     private void RefreshListView(){
         List<String> wc = toilets.GetListAddresses();
         String[] toiletslist = wc.toArray(new String[wc.size()]);
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, toiletslist);
+
+        mAdapter =  new ToiletListAdapter(this);
+        HashMap maps = toilets.getToiletsByCity();
+        String[] keys = (String[])( maps.keySet().toArray( new String[maps.size()] ) );
+        for (String key : keys) {
+            mAdapter.addSectionHeaderItem(key);
+            for (Toilette wcs : toilets.getToilettes()) {
+                if(key.equals(wcs.getVille()))
+                    mAdapter.addItem(wcs.getAdresse());
+            }
+        }
         ToiletListView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
     }

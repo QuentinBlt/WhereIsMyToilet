@@ -1,10 +1,7 @@
 package net.toilet.my.is.where.com.whereismytoilet.View;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import net.toilet.my.is.where.com.whereismytoilet.Tools.DataBase;
@@ -20,10 +17,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Created by quentinbaillet on 03/03/15.
@@ -32,8 +28,11 @@ public class ToiletteList extends AsyncTask<String, Void, JSONArray>{
 
     private String WebServiceURL = "https://download.data.grandlyon.com/ws/grandlyon/gin_nettoiement.gintoilettepublique/all.json";
     private ArrayList<Toilette> toilettes;
+    private HashMap<String, Toilette> toiletsByCity = new HashMap<String, Toilette>();
     private ToiletteListEvent _event;
     private Context _context;
+
+
 
     public interface ToiletteListEvent{
         public void onToiletteListFinished(ArrayList<Toilette> toilettes);
@@ -43,6 +42,14 @@ public class ToiletteList extends AsyncTask<String, Void, JSONArray>{
     public ToiletteList(ToiletteListEvent event, Context context){
         _event = event;
         _context = context;
+    }
+
+    public HashMap<String, Toilette> getToiletsByCity() {
+        return toiletsByCity;
+    }
+
+    public void setToiletsByCity(HashMap<String, Toilette> toiletsByCity) {
+        this.toiletsByCity = toiletsByCity;
     }
 
     public ArrayList<Toilette> getToilettes() {
@@ -92,16 +99,19 @@ public class ToiletteList extends AsyncTask<String, Void, JSONArray>{
                 String numerovoie = "";
                 String observation = "";
                 if(!json.getJSONArray(i).getString(2).equals("None"))
-                    numerovoie = json.getJSONArray(i).getString(2);
+                    numerovoie = json.getJSONArray(i).getString(2) + " ";
 
                 if(!json.getJSONArray(i).getString(4).equals("None"))
                     observation = json.getJSONArray(i).getString(4);
 
                 toilettes.add(new Toilette(json.getJSONArray(i).getString(6), json.getJSONArray(i).getString(5),
-                        String.format("%s %s",numerovoie,json.getJSONArray(i).getString(1)),
+                        String.format("%s%s",numerovoie,json.getJSONArray(i).getString(1)),
                         json.getJSONArray(i).getString(0), observation));
             }
             //InsertToiletteInDataBase();
+            for(Toilette toilet : toilettes)
+                getToiletsByCity().put(toilet.getVille(), toilet);
+
             _event.onToiletteListFinished(toilettes);
         }catch (Exception ex){
             _event.onToiletteListFailed(ex);
