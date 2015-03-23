@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,7 @@ import net.toilet.my.is.where.com.whereismytoilet.View.Toilette;
 import net.toilet.my.is.where.com.whereismytoilet.View.ToiletteList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,6 +40,13 @@ public class MainInterfaceActivity extends Activity implements ToiletteList.Toil
         RefreshToiletsWebService();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuItem searchItem = menu.findItem(R.id.menu_main_interface_search);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
     private void RefreshToiletsWebService() {
         toilets = new ToiletteList(this, this);
         toilets.execute(new String[]{});
@@ -50,9 +59,10 @@ public class MainInterfaceActivity extends Activity implements ToiletteList.Toil
         mAdapter =  new ToiletListAdapter(this);
         HashMap maps = toilets.getToiletsByCity();
         String[] keys = (String[])( maps.keySet().toArray( new String[maps.size()] ) );
+        Arrays.sort(keys);
         for (String key : keys) {
             mAdapter.addSectionHeaderItem(key);
-            for (Toilette wcs : toilets.getToilettes()) {
+            for (Toilette wcs : toilets.toilettesToShow) {
                 if(key.equals(wcs.getVille()))
                     mAdapter.addItem(wcs.getAdresse());
             }

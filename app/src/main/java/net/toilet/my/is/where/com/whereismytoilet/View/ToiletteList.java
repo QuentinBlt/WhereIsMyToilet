@@ -32,7 +32,7 @@ public class ToiletteList extends AsyncTask<String, Void, JSONArray>{
     private ToiletteListEvent _event;
     private Context _context;
 
-
+    public ArrayList<Toilette> toilettesToShow;
 
     public interface ToiletteListEvent{
         public void onToiletteListFinished(ArrayList<Toilette> toilettes);
@@ -45,6 +45,9 @@ public class ToiletteList extends AsyncTask<String, Void, JSONArray>{
     }
 
     public HashMap<String, Toilette> getToiletsByCity() {
+        for(Toilette toilet : toilettesToShow)
+            getToiletsByCity().put(toilet.getVille(), toilet);
+
         return toiletsByCity;
     }
 
@@ -108,9 +111,8 @@ public class ToiletteList extends AsyncTask<String, Void, JSONArray>{
                         String.format("%s%s",numerovoie,json.getJSONArray(i).getString(1)),
                         json.getJSONArray(i).getString(0), observation));
             }
+            toilettesToShow = toilettes;
             //InsertToiletteInDataBase();
-            for(Toilette toilet : toilettes)
-                getToiletsByCity().put(toilet.getVille(), toilet);
 
             _event.onToiletteListFinished(toilettes);
         }catch (Exception ex){
@@ -148,5 +150,18 @@ public class ToiletteList extends AsyncTask<String, Void, JSONArray>{
                addresses.add(toilette.getAdresse());
            }
         return addresses;
+    }
+
+    public void retablishList(){
+        toilettesToShow = toilettes;
+    }
+
+    public void findWordInList(String[] words){
+        toilettesToShow = new ArrayList<Toilette>();
+        for(Toilette toilet : toilettes){
+            if(toilet.findWord(words)){
+                toilettesToShow.add(toilet);
+            }
+        }
     }
 }

@@ -59,4 +59,12 @@ public class Toilette {
         ville = _ville;
         observation = _observation;
     }
+
+    public Boolean findWord(String[] words){
+        for(String word : words) {
+            if (adresse.contains(word) || ville.contains(word) || observation.contains(word))
+                return true;
+        }
+        return false;
+    }
 }
