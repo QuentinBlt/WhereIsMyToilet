@@ -45,10 +45,16 @@ public class ToiletteList extends AsyncTask<String, Void, JSONArray>{
     }
 
     public HashMap<String, Toilette> getToiletsByCity() {
-        for(Toilette toilet : toilettesToShow)
-            getToiletsByCity().put(toilet.getVille(), toilet);
+        try {
+            toiletsByCity = new HashMap<String, Toilette>();
+            for (Toilette toilet : toilettesToShow)
+                toiletsByCity.put(toilet.getVille(), toilet);
+        }catch (Exception ex){
+            return null;
+        }
 
         return toiletsByCity;
+
     }
 
     public void setToiletsByCity(HashMap<String, Toilette> toiletsByCity) {

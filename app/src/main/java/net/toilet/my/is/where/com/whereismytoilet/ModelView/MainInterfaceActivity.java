@@ -1,13 +1,16 @@
 package net.toilet.my.is.where.com.whereismytoilet.ModelView;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -87,7 +90,17 @@ public class MainInterfaceActivity extends Activity implements ToiletteList.Toil
                 RefreshToiletsWebService();
             }
         });
+        ToiletListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                callDetailInterface();
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         SetToolBar();
     }
@@ -110,6 +123,10 @@ public class MainInterfaceActivity extends Activity implements ToiletteList.Toil
                 return true;
             }
         });
+    }
+
+    private void callDetailInterface(){
+        startActivity(new Intent(this, Detail_ToiletActivity.class));
     }
 
     @Override

@@ -1,0 +1,7 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="net.toilet.my.is.where.com.whereismytoilet.ModelView.Detail_ToiletActivity">
+    <item android:id="@+id/menu_detail_toilet_locate" android:title="" app:showAsAction="always" android:icon="@drawable/ic_navigation_white_36dp"/>
+    <item android:id="@+id/menu_detail_toilet_share" android:title="" app:showAsAction="always" android:icon="@drawable/ic_share_white_36dp"/>
+</menu>
