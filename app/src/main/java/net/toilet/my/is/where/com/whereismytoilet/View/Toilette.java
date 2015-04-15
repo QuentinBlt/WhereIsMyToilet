@@ -60,6 +60,12 @@ public class Toilette {
         observation = _observation;
     }
 
+    public Toilette(String adresse, String ville, String observation) {
+        this.adresse = adresse;
+        this.ville = ville;
+        this.observation = observation;
+    }
+
     public Boolean findWord(String[] words){
         for(String word : words) {
             if (adresse.contains(word) || ville.contains(word) || observation.contains(word))

@@ -90,17 +90,17 @@ public class MainInterfaceActivity extends Activity implements ToiletteList.Toil
                 RefreshToiletsWebService();
             }
         });
-        ToiletListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        ToiletListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                callDetailInterface();
-            }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    Toilette toilette = (Toilette)parent.getItemAtPosition(position);
+                    callDetailInterface(toilette);
+                }catch (Exception ex){
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+                }
             }
-        });
+        }) ;
 
         SetToolBar();
     }
@@ -125,8 +125,12 @@ public class MainInterfaceActivity extends Activity implements ToiletteList.Toil
         });
     }
 
-    private void callDetailInterface(){
-        startActivity(new Intent(this, Detail_ToiletActivity.class));
+    private void callDetailInterface(Toilette toilette){
+        Intent intent = new Intent(this, DetailMapsActivity.class);
+        intent.putExtra(DetailMapsActivity.INTENT_MAINTODETAIL_ADRESSE, toilette.getAdresse());
+        intent.putExtra(DetailMapsActivity.INTENT_MAINTODETAIL_VILLE, toilette.getVille());
+        intent.putExtra(DetailMapsActivity.INTENT_MAINTODETAIL_OBSERVATION, toilette.getObservation());
+        startActivity(intent);
     }
 
     @Override
