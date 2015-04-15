@@ -67,7 +67,7 @@ public class MainInterfaceActivity extends Activity implements ToiletteList.Toil
             mAdapter.addSectionHeaderItem(key);
             for (Toilette wcs : toilets.toilettesToShow) {
                 if(key.equals(wcs.getVille()))
-                    mAdapter.addItem(wcs.getAdresse());
+                    mAdapter.addItem(wcs);
             }
         }
         ToiletListView.setAdapter(mAdapter);

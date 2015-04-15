@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import net.toilet.my.is.where.com.whereismytoilet.R;
+import net.toilet.my.is.where.com.whereismytoilet.View.Toilette;
 
 import java.util.ArrayList;
 import java.util.TreeSet;
@@ -20,7 +21,7 @@ public class ToiletListAdapter extends BaseAdapter {
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_SEPARATOR = 1;
 
-    private ArrayList<String> mData = new ArrayList<String>();
+    private ArrayList<Object> mData = new ArrayList<Object>();
     private TreeSet<Integer> sectionHeader = new TreeSet<Integer>();
 
     private LayoutInflater mInflater;
@@ -30,7 +31,7 @@ public class ToiletListAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void addItem(final String item) {
+    public void addItem(final Toilette item) {
         mData.add(item);
         notifyDataSetChanged();
     }
@@ -57,7 +58,7 @@ public class ToiletListAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int position) {
+    public Object getItem(int position) {
         return mData.get(position);
     }
 
@@ -86,7 +87,16 @@ public class ToiletListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.textView.setText(mData.get(position));
+
+        switch (rowType) {
+            case TYPE_ITEM:
+                holder.textView.setText(((Toilette)mData.get(position)).getAdresse());
+                break;
+            case TYPE_SEPARATOR:
+                holder.textView.setText((String)mData.get(position));
+                break;
+        }
+
 
         return convertView;
     }
