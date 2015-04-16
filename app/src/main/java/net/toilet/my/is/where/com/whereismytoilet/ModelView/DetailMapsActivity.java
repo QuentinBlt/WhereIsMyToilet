@@ -1,10 +1,17 @@
 package net.toilet.my.is.where.com.whereismytoilet.ModelView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,9 +35,15 @@ public class DetailMapsActivity extends FragmentActivity {
     private Toilette toilette;
     private TextView AddressText, CityText, ObservationText;
 
+    private double latitude, longitude;
+    private String fullAddress;
+
     public static final String INTENT_MAINTODETAIL_VILLE = "12345";
     public static final String INTENT_MAINTODETAIL_ADRESSE = "12346";
     public static final String INTENT_MAINTODETAIL_OBSERVATION = "12347";
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +83,24 @@ public class DetailMapsActivity extends FragmentActivity {
                 finish();
             }
         });
+        setListenerToolBar();
+    }
+
+    private void setListenerToolBar(){
+        detailToolBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.menu_detail_toilet_share:
+                        ShareContent();
+                        break;
+                    case R.id.menu_detail_toilet_locate:
+                        NavigationTo();
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -78,21 +109,6 @@ public class DetailMapsActivity extends FragmentActivity {
         setUpMapIfNeeded();
     }
 
-    /**
-     * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
-     * installed) and the map has not already been instantiated.. This will ensure that we only ever
-     * call {@link #setUpMap()} once when {@link #mMap} is not null.
-     * <p/>
-     * If it isn't installed {@link SupportMapFragment} (and
-     * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
-     * install/update the Google Play services APK on their device.
-     * <p/>
-     * A user can return to this FragmentActivity after following the prompt and correctly
-     * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
-     * have been completely destroyed during this process (it is likely that it would only be
-     * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
-     * method in {@link #onResume()} to guarantee that it will be called.
-     */
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
@@ -106,23 +122,35 @@ public class DetailMapsActivity extends FragmentActivity {
         }
     }
 
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
+
     private void setUpMap() {
         try {
             Geocoder geocoder = new Geocoder(this, Locale.FRANCE);
-            String locationName = (toilette.getAdresse() + " " + toilette.getVille());
-            List<Address> addresses = geocoder.getFromLocationName(locationName, 1);
-            mMap.addMarker(new MarkerOptions().position(new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude())).title("Marker"));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(addresses.get(0).getLatitude(),
-                    addresses.get(0).getLongitude()), 17.0f));
+            fullAddress = (toilette.getAdresse() + " " + toilette.getVille());
+            List<Address> addresses = geocoder.getFromLocationName(fullAddress, 1);
+            latitude = addresses.get(0).getLatitude();
+            longitude = addresses.get(0).getLongitude();
+            mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Marker"));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 17.0f));
 
         }catch (Exception ex){
             Toast.makeText(this, "Location non trouvée", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void ShareContent(){
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Voici les toilettes publiques que je viens de trouver :\n" + fullAddress);
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+    }
+
+    private void NavigationTo(){
+        Geocoder geocoder = new Geocoder(this, Locale.FRANCE);
+        Uri routeUri = Uri.parse("http://maps.google.com/maps?" +"&daddr=" + fullAddress);
+
+        Intent i = new Intent(Intent.ACTION_VIEW, routeUri);
+        startActivity(i);
     }
 }
