@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import net.toilet.my.is.where.com.whereismytoilet.R;
-import net.toilet.my.is.where.com.whereismytoilet.View.Toilette;
+import net.toilet.my.is.where.com.whereismytoilet.Models.Toilette;
 
 import java.util.ArrayList;
 import java.util.TreeSet;

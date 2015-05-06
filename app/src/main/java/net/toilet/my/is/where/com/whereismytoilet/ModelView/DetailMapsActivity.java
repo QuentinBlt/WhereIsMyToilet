@@ -1,16 +1,12 @@
 package net.toilet.my.is.where.com.whereismytoilet.ModelView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -23,7 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import net.toilet.my.is.where.com.whereismytoilet.R;
-import net.toilet.my.is.where.com.whereismytoilet.View.Toilette;
+import net.toilet.my.is.where.com.whereismytoilet.Models.Toilette;
 
 import java.util.List;
 import java.util.Locale;

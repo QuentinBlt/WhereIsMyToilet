@@ -1,4 +1,4 @@
-package net.toilet.my.is.where.com.whereismytoilet.View;
+package net.toilet.my.is.where.com.whereismytoilet.Models;
 
 /**
  * Created by quentinbaillet on 03/03/15.
@@ -9,6 +9,8 @@ public class Toilette {
     private String adresse;
     private String ville;
     private String observation;
+    private double longitude;
+    private double latitude;
 
     public String getGid() {
         return gid;
@@ -72,5 +74,21 @@ public class Toilette {
                 return true;
         }
         return false;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 }

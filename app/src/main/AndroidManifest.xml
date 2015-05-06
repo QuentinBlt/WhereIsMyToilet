@@ -42,7 +42,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".View.activity_detail_toilet_googlemap"
+            android:name=".Models.activity_detail_toilet_googlemap"
             android:label="@string/title_activity_activity_detail_toilet_googlemap" >
         </activity>
         <activity

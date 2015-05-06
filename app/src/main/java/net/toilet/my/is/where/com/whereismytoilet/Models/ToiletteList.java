@@ -1,4 +1,4 @@
-package net.toilet.my.is.where.com.whereismytoilet.View;
+package net.toilet.my.is.where.com.whereismytoilet.Models;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 
